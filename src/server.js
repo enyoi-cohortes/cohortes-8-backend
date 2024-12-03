@@ -6,6 +6,7 @@ import express from 'express';
 import './database/connection.js';
 
 import userRouter from './routes/user.routes.js';
+import authRouter from './routes/auth.routes.js';
 
 async function main() {
   const app = express();
@@ -15,6 +16,7 @@ async function main() {
   app.use(morgan('dev'));
   app.use(express.json());
 
+  app.use('/auth', authRouter);
   app.use('/users', userRouter);
 
   const httpServer = http.createServer(app);

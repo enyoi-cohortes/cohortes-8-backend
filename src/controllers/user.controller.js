@@ -1,25 +1,7 @@
 import { v4, } from 'uuid';
 
 import { User, } from '../database/models/index.js';
-
-const validBody = (
-  attributes, 
-  body, 
-  skipFields = [],
-) => {
-  let isValidBody = true;
-  Object.entries(attributes).forEach(([key, value,]) => {
-    if (skipFields.includes(key)) return;
-
-    if (!value?.allowNull && !body[key]) {
-      isValidBody = false;
-    } else {
-      isValidBody = true;
-    }
-  });
-
-  return isValidBody;
-}
+import { validBody, }  from '../utils/validBody.js';
 
 async function createUser(req, res) {
   const attributes = User.getAttributes();
@@ -30,8 +12,6 @@ async function createUser(req, res) {
         message: 'Invalid body',
       });
   }
-
-  // TODO: crear validacion del email y de otros datos.
 
   const newUser = {
     ...req.body,

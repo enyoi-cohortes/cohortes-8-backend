@@ -8,6 +8,9 @@ import {
   hashPassword, 
   verifyPassword, 
 } from '../services/auth.service.js';
+import {
+  sendMail,
+} from '../services/email.service.js';
 
 async function login(req, res) {
   const {
@@ -47,14 +50,13 @@ async function login(req, res) {
     }
 
     const now = new Date();
-    const expiresIn = new Date(new Date(now.getTime()).setHours(2)).getTime();
+    const expiresIn = 60 * 60 * 2; // 2 horas
 
     const payload = {
       sub: user.id, // Subject es decir el dueño del token (usuario).
       iat: Math.floor(now.getTime() / 1000), // Iat fecha de creacion del token
       iss: process.env.APP_URL,
-      // TODO: validate exp date
-      exp: Math.floor(expiresIn / 1000), // Emisor del token
+      exp: Math.floor(now.getTime() / 1000) + expiresIn, // Emisor del token
       name: `${user.givenName} ${user.familyName}`, // Claim custom
       nationalId: user.nationalId, // Claim custom
     };
@@ -141,6 +143,12 @@ async function signup(req, res) {
         });
     }
   
+    await sendMail({
+      to: createdUser.email,
+      subject: 'Bienvenido!',
+      body: `<h1>Hola ${createdUser.givenName} es un gusto tenerte con nosotros</h1>`,
+    });
+
     return res
       .status(201)
       .json({

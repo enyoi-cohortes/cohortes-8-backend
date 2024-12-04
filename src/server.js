@@ -7,6 +7,7 @@ import './database/connection.js';
 
 import userRouter from './routes/user.routes.js';
 import authRouter from './routes/auth.routes.js';
+import authMiddleware from './middlewares/auth.middleware.js';
 
 async function main() {
   const app = express();
@@ -17,7 +18,7 @@ async function main() {
   app.use(express.json());
 
   app.use('/auth', authRouter);
-  app.use('/users', userRouter);
+  app.use('/users', authMiddleware, userRouter);
 
   const httpServer = http.createServer(app);
   httpServer.listen(port, () => {

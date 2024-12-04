@@ -25,7 +25,16 @@ async function jwtEncode(payload) {
   return token;
 }
 
-async function jwtVerify() {}
+async function jwtVerify(encoded) {
+  try {
+    const secretKey = process.env.JWT_SECRET;
+  
+    const payload  = jwt.verify(encoded, secretKey);
+    return payload;
+  } catch (err) {
+    return null;
+  }
+}
 
 export {
   jwtEncode,

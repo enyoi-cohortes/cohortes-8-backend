@@ -7,7 +7,10 @@ import './database/connection.js';
 
 import userRouter from './routes/user.routes.js';
 import authRouter from './routes/auth.routes.js';
+import backofficeRouter from './routes/backoffice.routes.js';
+
 import authMiddleware from './middlewares/auth.middleware.js';
+import adminMiddleware from './middlewares/admin.middleware.js';
 
 async function main() {
   const app = express();
@@ -19,6 +22,7 @@ async function main() {
 
   app.use('/auth', authRouter);
   app.use('/users', authMiddleware, userRouter);
+  app.use('/backoffice', authMiddleware, adminMiddleware, backofficeRouter);
 
   const httpServer = http.createServer(app);
   httpServer.listen(port, () => {

@@ -24,6 +24,8 @@ async function authMiddleware(req, res, next) {
       });
   }
 
+  req.userId = payload.sub;
+
   next();
 }
 

@@ -39,6 +39,11 @@ const User = connection.define(
       unique: true,
       allowNull: false,
     },
+    isAdmin: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: true,
+    },
   },
   {
     timestamps: true,

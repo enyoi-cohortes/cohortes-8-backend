@@ -7,7 +7,9 @@ import './database/connection.js';
 
 import userRouter from './routes/user.routes.js';
 import authRouter from './routes/auth.routes.js';
+import mainRouter from './routes/main.routes.js';
 import backofficeRouter from './routes/backoffice.routes.js';
+import reservationRouter from './routes/reservation.routes.js';
 
 import authMiddleware from './middlewares/auth.middleware.js';
 import adminMiddleware from './middlewares/admin.middleware.js';
@@ -20,8 +22,10 @@ async function main() {
   app.use(morgan('dev'));
   app.use(express.json());
 
+  app.use('/api', mainRouter);
   app.use('/auth', authRouter);
   app.use('/users', authMiddleware, userRouter);
+  app.use('/reservations', authMiddleware, reservationRouter);
   app.use('/backoffice', authMiddleware, adminMiddleware, backofficeRouter);
 
   const httpServer = http.createServer(app);
